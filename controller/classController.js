@@ -63,7 +63,11 @@ module.exports.getAllClass = async function (req,res) {
 module.exports.getClassById = async function (req,res) {
     const { class_id } = req.params;
     try{
-        const response = await ClassModel.findById(class_id);
+        const classes = await ClassModel.findOne({ where : { class_id : class_id}});
+        if(!classes) {
+            return res.status(404).json({ message : "Class Id not found"});
+        }
+        const response = await ClassModel.findOne({ where : { class_id : class_id}});
         res.status(200).send({
             data : response,
             message : "Class Details Fetched Successfully..."
